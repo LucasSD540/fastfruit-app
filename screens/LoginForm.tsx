@@ -4,12 +4,18 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
+  Dimensions
 } from "react-native";
 import { AppText } from "../components/AppText";
 
+const { height } = Dimensions.get('screen');
+
 export const LoginForm = ({ navigation }: any) => {
   return (
-    <View>
+      <ScrollView>
+    <View style={styles.mainContainer}>
+      <View>
       <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
         <Image
           style={styles.image}
@@ -22,21 +28,27 @@ export const LoginForm = ({ navigation }: any) => {
         <TextInput style={styles.input} placeholder="Senha"></TextInput>
       </View>
       <AppText style={styles.forgotText}>Esqueci minha senha</AppText>
+      </View>
       <TouchableOpacity style={styles.button}>
         <AppText style={styles.buttonText}>Continuar</AppText>
       </TouchableOpacity>
     </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    height: height,
+  },
   container: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
   image: {
-    margin: 24,
+    marginLeft: 24,
+    marginTop: 48,
   },
   text: {
     fontSize: 20,
@@ -52,17 +64,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 10,
   },
-  placeholderText: {
-    color: "#00000047",
-    fontSize: 15,
-  },
   forgotText: {
     color: "#1877F2",
     fontSize: 14,
     marginLeft: 24,
   },
   button: {
-    marginTop: 440,
+    position: "absolute",
+    bottom: 56,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

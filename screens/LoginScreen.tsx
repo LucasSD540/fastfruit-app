@@ -1,9 +1,12 @@
-import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from "react-native";
 import { AppText } from "../components/AppText";
+
+const { height } = Dimensions.get('screen');
 
 export const LoginScreen = ({ navigation }: any) => {
   return (
-    <View>
+    <ScrollView>
+      <View style={styles.container}>
       <Image source={require("../assets/banner.png")} style={styles.banner} />
       <TouchableOpacity
         style={styles.button1}
@@ -11,7 +14,10 @@ export const LoginScreen = ({ navigation }: any) => {
       >
         <AppText style={styles.buttonText}>Já tenho uma conta</AppText>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button2}>
+      <TouchableOpacity 
+        style={styles.button2} 
+        onPress={() => navigation.navigate("RegisterForm")}
+      >
         <AppText style={styles.buttonText}>Criar nova conta</AppText>
       </TouchableOpacity>
       <AppText style={styles.accessText}>Acessar com</AppText>
@@ -20,17 +26,18 @@ export const LoginScreen = ({ navigation }: any) => {
         <Image source={require("../assets/google_logo.png")} />
       </View>
       <AppText style={styles.visitorText}>Continuar como visitante</AppText>
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: height,
   },
   banner: {
     width: "100%",
-    height: 560,
+    height: 480,
   },
   button1: {
     display: "flex",

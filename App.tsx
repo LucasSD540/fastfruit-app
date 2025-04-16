@@ -4,6 +4,7 @@ import { useFonts } from "expo-font";
 import { Itim_400Regular } from "@expo-google-fonts/itim";
 import { LoginScreen } from "./screens/LoginScreen";
 import { LoginForm } from "./screens/LoginForm";
+import { RegisterForm } from "./screens/RegisterForm";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,11 @@ export default function App() {
           options={{ headerShown: false }}
           name="LoginForm"
           component={LoginForm}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="RegisterForm"
+          component={RegisterForm}
         />
       </Stack.Navigator>
     </NavigationContainer>
