@@ -3,7 +3,7 @@ import {
   Image,
   TextInput,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   ScrollView,
   Dimensions
 } from "react-native";
@@ -16,12 +16,12 @@ export const LoginForm = ({ navigation }: any) => {
       <ScrollView>
     <View style={styles.mainContainer}>
       <View>
-      <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+      <Pressable onPress={() => navigation.navigate("LoginScreen")}>
         <Image
           style={styles.image}
           source={require("../assets/back_icon.png")}
         />
-      </TouchableOpacity>
+      </Pressable>
       <AppText style={styles.text}>Suas informações</AppText>
       <View style={styles.container}>
         <TextInput style={styles.input} placeholder="E-mail"></TextInput>
@@ -29,9 +29,9 @@ export const LoginForm = ({ navigation }: any) => {
       </View>
       <AppText style={styles.forgotText}>Esqueci minha senha</AppText>
       </View>
-      <TouchableOpacity style={styles.button}>
+      <Pressable onPress={() => navigation.navigate("ChoiceProfile")} style={styles.button}>
         <AppText style={styles.buttonText}>Continuar</AppText>
-      </TouchableOpacity>
+      </Pressable>
     </View>
     </ScrollView>
   );

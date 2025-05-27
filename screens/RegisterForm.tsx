@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, ScrollView, Image, TextInput, StyleSheet, Dimensions } from "react-native"
+import { View, Pressable, ScrollView, Image, TextInput, StyleSheet, Dimensions } from "react-native"
 import { AppText } from "../components/AppText"
 
 const { height } = Dimensions.get('screen');
@@ -7,9 +7,9 @@ export const RegisterForm = ({ navigation }: any) => {
     return (
         <ScrollView>
             <View style={styles.mainContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+                <Pressable onPress={() => navigation.navigate("LoginScreen")}>
                   <Image style={styles.image} source={require('../assets/back_icon.png')} />
-                </TouchableOpacity>
+                </Pressable>
                 <AppText style={styles.text}>Suas informações</AppText>
                 <View style={styles.container}>
                   <TextInput style={styles.input} placeholder="E-mail"></TextInput>
@@ -19,9 +19,9 @@ export const RegisterForm = ({ navigation }: any) => {
                   <TextInput style={styles.input} placeholder="Senha"></TextInput>
                   <TextInput style={styles.input} placeholder="Confirmar senha"></TextInput>
                 </View>
-                <TouchableOpacity style={styles.button}>
+                <Pressable style={styles.button}>
                   <AppText style={styles.buttonText}>Cadastrar</AppText>
-                </TouchableOpacity>
+                </Pressable>
             </View>
         </ScrollView>
     )

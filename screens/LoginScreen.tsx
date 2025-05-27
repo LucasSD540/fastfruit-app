@@ -1,4 +1,4 @@
-import { View, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from "react-native";
+import { View, Image, StyleSheet, Pressable, ScrollView, Dimensions } from "react-native";
 import { AppText } from "../components/AppText";
 
 const { height } = Dimensions.get('screen');
@@ -8,18 +8,18 @@ export const LoginScreen = ({ navigation }: any) => {
     <ScrollView>
       <View style={styles.container}>
       <Image source={require("../assets/banner.png")} style={styles.banner} />
-      <TouchableOpacity
+      <Pressable
         style={styles.button1}
         onPress={() => navigation.navigate("LoginForm")}
       >
         <AppText style={styles.buttonText}>Já tenho uma conta</AppText>
-      </TouchableOpacity>
-      <TouchableOpacity 
+      </Pressable>
+      <Pressable 
         style={styles.button2} 
         onPress={() => navigation.navigate("RegisterForm")}
       >
         <AppText style={styles.buttonText}>Criar nova conta</AppText>
-      </TouchableOpacity>
+      </Pressable>
       <AppText style={styles.accessText}>Acessar com</AppText>
       <View style={styles.flexImageView}>
         <Image source={require("../assets/facebook_logo.png")} />
