@@ -8,7 +8,7 @@ export const ChoiceProfile = ({ navigation }: any) => {
             <View style={styles.twoProfilesDiv}>
                 <View style={styles.profileDiv}>
                     <View style={styles.whiteProfileBallDiv}>
-                        <Pressable onPress={() => navigation.navigate("")}>
+                        <Pressable onPress={() => navigation.navigate("HomeScreen")}>
                             <Image source={require("../assets/user_profile.png")} alt="" />
                         </Pressable>
                     </View>

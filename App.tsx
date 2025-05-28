@@ -6,6 +6,7 @@ import { LoginScreen } from "./screens/LoginScreen";
 import { LoginForm } from "./screens/LoginForm";
 import { RegisterForm } from "./screens/RegisterForm";
 import { ChoiceProfile } from "./screens/ChoiceProfile";
+import { HomeScreen } from "./screens/HomeScreen";
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,11 @@ export default function App() {
           options={{ headerShown: false }}
           name="ChoiceProfile"
           component={ChoiceProfile}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="HomeScreen"
+          component={HomeScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
