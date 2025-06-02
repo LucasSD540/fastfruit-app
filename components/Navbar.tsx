@@ -5,7 +5,7 @@ export const Navbar = () => {
     const { height } = useWindowDimensions();
 
     return (
-        <View style={[styles.container, { top: height - 12 }]}>
+        <View style={styles.container}>
             <View style={styles.menuItemDiv}>
                 <Image source={require("../assets/home_menu.png")} />
                 <AppText style={styles.menuItemText}>Início</AppText>
@@ -34,7 +34,8 @@ export const styles = StyleSheet.create({
         width: "80%",
         marginLeft: "10%",
         height: 48,
-        position: "absolute"
+        position: "absolute",
+        bottom: 48
     },
     menuItemDiv: {
         display: "flex",
