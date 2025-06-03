@@ -6,8 +6,9 @@ import { LoginScreen } from "./screens/LoginScreen";
 import { LoginForm } from "./screens/LoginForm";
 import { RegisterForm } from "./screens/RegisterForm";
 import { ChoiceProfile } from "./screens/ChoiceProfile";
-import { HomeScreen } from "./screens/HomeScreen";
 import BottomTabs from "./navigation/BottomTabs";
+import { ProfileScreen } from "./screens/ProfileScreen";
+import { EditProfile } from "./screens/EditProfile";
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,16 @@ export default function App() {
           options={{ headerShown: false }}
           name="HomeScreen"
           component={BottomTabs}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="ProfileScreen"
+          component={ProfileScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="EditProfile"
+          component={EditProfile}
         />
       </Stack.Navigator>
     </NavigationContainer>

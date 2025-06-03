@@ -1,0 +1,110 @@
+import { Image, Pressable, View, StyleSheet, TextInput } from "react-native"
+import { AppText } from "../components/AppText"
+
+export const EditProfile = ({ navigation }: any) => {
+    return (
+        <View>
+            <View style={styles.logoDiv}>
+                <Image style={styles.logoImg} source={require("../assets/logo.png")} />
+            </View>
+            <View style={styles.line} />
+            <Pressable onPress={() => navigation.navigate("ProfileScreen")}>
+                <Image
+                    style={styles.image}
+                    source={require("../assets/back_icon.png")}
+                />
+            </Pressable>
+            <View style={styles.container}>
+                <View>
+                    <Image style={styles.cameraImg} source={require("../assets/camera.png")} />
+                    <Image style={styles.userImg} source={require("../assets/user_profile.png")} />
+                    <View style={styles.userImgDark} />
+                </View>
+                <AppText style={styles.sectionTitle}>Alterar foto de perfil</AppText>
+                <TextInput style={styles.input} placeholder="Nome" />
+                <TextInput style={styles.input} placeholder="Sobrenome" />
+                <TextInput style={styles.input} placeholder="CEP" />
+                <TextInput style={styles.input} placeholder="Endereço" />
+                <TextInput style={styles.input} placeholder="Complemento" />
+                <Pressable onPress={() => navigation.navigate("ProfileScreen")} style={styles.button}>
+                    <AppText style={styles.buttonText}>Atualizar informações</AppText>
+                </Pressable>
+            </View>
+        </View>
+    )
+}
+
+export const styles = StyleSheet.create({
+    container: {
+        display: "flex",
+        alignItems: "center",
+        width: "90%",
+        left: "5%",
+        marginTop: 32
+    },
+    logoDiv: {
+        width: "100%",
+        height: 100,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+    },
+    logoImg: {
+        marginTop: 24,
+    },
+    line: {
+        width: "100%",
+        height: 1,
+        backgroundColor: "#000",
+    },
+    userImg: {
+        width: 104,
+        height: 99,
+    },
+    userImgDark: {
+        position: "absolute",
+        width: 104,
+        height: 104,
+        backgroundColor: "rgba(0,0,0, .25)",
+        borderRadius: "100%",
+    },
+    cameraImg: {
+        position: "absolute",
+        top: 30,
+        left: 32,
+        zIndex: 10
+    },
+    image: {
+        position: "absolute",
+        left: "5%",
+        marginTop: 32,
+    },
+    sectionTitle: {
+        fontSize: 18,
+        marginTop: 8,
+        marginBottom: 16
+    },
+    input: {
+        width: "100%",
+        height: 45,
+        borderColor: "#00000047",
+        borderWidth: 1,
+        marginVertical: 12,
+        paddingHorizontal: 12,
+        borderRadius: 10,
+      },
+      button: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        height: 49,
+        backgroundColor: "#FF9A3D",
+        borderRadius: 10,
+        marginTop: 32
+      },
+      buttonText: {
+        color: "#fff",
+        fontSize: 20,
+      },
+})

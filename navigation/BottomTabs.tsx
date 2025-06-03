@@ -2,6 +2,7 @@ import React from "react";
 import { Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { HomeScreen } from "../screens/HomeScreen";
+import { ProfileScreen } from "../screens/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -67,7 +68,7 @@ export default function BottomTabs() {
       />
       <Tab.Screen
         name="Perfil"
-        component={HomeScreen}
+        component={ProfileScreen}
         options={{
           headerShown: false,
           tabBarIcon: () => (

@@ -2,7 +2,6 @@ import {
   View,
   Image,
   StyleSheet,
-  useWindowDimensions,
   ScrollView,
 } from "react-native";
 import { AppText } from "../components/AppText";
