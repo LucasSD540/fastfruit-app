@@ -9,6 +9,7 @@ import { ChoiceProfile } from "./screens/ChoiceProfile";
 import BottomTabs from "./navigation/BottomTabs";
 import { ProfileScreen } from "./screens/ProfileScreen";
 import { EditProfile } from "./screens/EditProfile";
+import { PaymentMethodsScreen } from "./screens/PaymentMethodsScreen";
 
 const Stack = createStackNavigator();
 
@@ -54,6 +55,11 @@ export default function App() {
           options={{ headerShown: false }}
           name="EditProfile"
           component={EditProfile}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="PaymentMethodsScreen"
+          component={PaymentMethodsScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
