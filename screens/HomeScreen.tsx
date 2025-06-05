@@ -1,12 +1,7 @@
-import {
-  View,
-  Image,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Image, StyleSheet, ScrollView, Pressable } from "react-native";
 import { AppText } from "../components/AppText";
 
-export const HomeScreen = () => {
+export const HomeScreen = ({ navigation }: any) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.logoDiv}>
@@ -22,34 +17,46 @@ export const HomeScreen = () => {
         </View>
         <AppText style={styles.sectionTile}>Mais comprados</AppText>
         <View style={styles.productContainer}>
-          <View style={styles.productDiv}>
+          <Pressable
+            onPress={() => navigation.navigate("SelectProductScreen")}
+            style={styles.productDiv}
+          >
             <Image
               style={styles.productImage}
               source={require("../assets/brocolis.png")}
             />
             <AppText style={styles.productName}>Brócolis</AppText>
-          </View>
-          <View style={styles.productDiv}>
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate("SelectProductScreen")}
+            style={styles.productDiv}
+          >
             <Image
               style={styles.productImage}
               source={require("../assets/brocolis.png")}
             />
             <AppText style={styles.productName}>Brócolis</AppText>
-          </View>
-          <View style={styles.productDiv}>
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate("SelectProductScreen")}
+            style={styles.productDiv}
+          >
             <Image
               style={styles.productImage}
               source={require("../assets/brocolis.png")}
             />
             <AppText style={styles.productName}>Brócolis</AppText>
-          </View>
-          <View style={styles.productDiv}>
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate("SelectProductScreen")}
+            style={styles.productDiv}
+          >
             <Image
               style={styles.productImage}
               source={require("../assets/brocolis.png")}
             />
             <AppText style={styles.productName}>Brócolis</AppText>
-          </View>
+          </Pressable>
         </View>
         <View style={styles.productContainer}>
           <View style={styles.productDiv}>

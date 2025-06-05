@@ -10,6 +10,12 @@ import BottomTabs from "./navigation/BottomTabs";
 import { ProfileScreen } from "./screens/ProfileScreen";
 import { EditProfile } from "./screens/EditProfile";
 import { PaymentMethodsScreen } from "./screens/PaymentMethodsScreen";
+import { SelectProductScreen } from "./screens/SelectProductScreen";
+import { AddProductScreen } from "./screens/AddProductScreen";
+import { CartScreen } from "./screens/CartScreen";
+import { AddressScreen } from "./screens/AddressScreen";
+import { PaymentScreen } from "./screens/PaymentScreen";
+import { PixScreen } from "./screens/PixScreen";
 
 const Stack = createStackNavigator();
 
@@ -60,6 +66,36 @@ export default function App() {
           options={{ headerShown: false }}
           name="PaymentMethodsScreen"
           component={PaymentMethodsScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="SelectProductScreen"
+          component={SelectProductScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="AddProductScreen"
+          component={AddProductScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="CartScreen"
+          component={CartScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="AddressScreen"
+          component={AddressScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="PaymentScreen"
+          component={PaymentScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="PixScreen"
+          component={PixScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
