@@ -4,15 +4,22 @@ import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 
 type Product = {
-  id: string;
+  id: number;
   created_at: string;
   productName: string;
   productImgUrl: string;
   price: number;
 };
 
+type Store = {
+  id: number;
+  storeImgUrl: string;
+  storeName: string;
+};
+
 export const HomeScreen = ({ navigation }: any) => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,7 +28,7 @@ export const HomeScreen = ({ navigation }: any) => {
       const { data, error } = await supabase
         .from("product")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: true });
 
       if (error) {
         console.error("Erro ao buscar produtos:", error);
@@ -31,10 +38,24 @@ export const HomeScreen = ({ navigation }: any) => {
       setLoading(false);
     };
 
-    fetchProducts();
-  }, []);
+    const fetchStores = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("store")
+        .select("*")
+        .order("created_at", { ascending: true });
 
-  console.log("Products in state:", products);
+      if (error) {
+        console.error("Erro ao buscar lojas:", error);
+      } else {
+        setStores(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchProducts();
+    fetchStores();
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
@@ -78,93 +99,58 @@ export const HomeScreen = ({ navigation }: any) => {
         </View>
         <AppText style={styles.sectionTile}>Últimas lojas</AppText>
         <View style={styles.productLastStoreContainer}>
-          <View style={styles.productDivLastStore}>
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-            <AppText style={styles.productName}>
-              HortiFruti - Taguatinga
-            </AppText>
-          </View>
-          <View style={styles.productDivLastStore}>
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-            <AppText style={styles.productName}>
-              Oba HortiFruti - Taguatinga{" "}
-            </AppText>
-          </View>
+          {loading ? (
+            <AppText>Carregando...</AppText>
+          ) : (
+            stores.map((store) => (
+              <View key={store.id} style={styles.productDivLastStore}>
+                <Image
+                  style={styles.productImage}
+                  source={{ uri: store.storeImgUrl }}
+                />
+                <AppText style={styles.productName}>{store.storeName}</AppText>
+              </View>
+            ))
+          )}
         </View>
         <AppText style={styles.sectionTile}>Meus favoritos</AppText>
         <View style={styles.productLastStoreContainer}>
-          <View style={styles.productDivFavorites}>
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-          </View>
-          <View style={styles.productDivFavorites}>
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-          </View>
+          {loading ? (
+            <AppText>Carregando...</AppText>
+          ) : (
+            stores.map((store) => (
+              <View key={store.id} style={styles.productDivFavorites}>
+                <Image
+                  style={styles.productImage}
+                  source={{ uri: store.storeImgUrl }}
+                />
+              </View>
+            ))
+          )}
         </View>
         <AppText style={styles.sectionTile}>Lojas</AppText>
         <View style={styles.productStoreContainer}>
-          <View style={styles.flexStoreContainer}>
-            <View style={styles.productDivFavorites}>
-              <Image
-                style={styles.productImage}
-                source={require("../assets/brocolis.png")}
-              />
-            </View>
-            <View style={styles.flexNameDiv}>
-              <AppText style={styles.storeName}>
-                HortiFruti - Taguatinga
-              </AppText>
-              <Image
-                style={styles.favoriteImage}
-                source={require("../assets/favorite_icon.png")}
-              />
-            </View>
-          </View>
-          <View style={styles.flexStoreContainer}>
-            <View style={styles.productDivFavorites}>
-              <Image
-                style={styles.productImage}
-                source={require("../assets/brocolis.png")}
-              />
-            </View>
-            <View style={styles.flexNameDiv}>
-              <AppText style={styles.storeName}>
-                Oba HortiFruti - Tagu...
-              </AppText>
-              <Image
-                style={styles.favoriteImage}
-                source={require("../assets/favorite_icon.png")}
-              />
-            </View>
-          </View>
-          <View style={styles.flexStoreContainer}>
-            <View style={styles.productDivFavorites}>
-              <Image
-                style={styles.productImage}
-                source={require("../assets/brocolis.png")}
-              />
-            </View>
-            <View style={styles.flexNameDiv}>
-              <AppText style={styles.storeName}>
-                HortaSul Distribuidor...
-              </AppText>
-              <Image
-                style={styles.favoriteImage}
-                source={require("../assets/unfavorite_icon.png")}
-              />
-            </View>
-          </View>
+          {loading ? (
+            <AppText>Carregando...</AppText>
+          ) : (
+            stores.map((store) => (
+              <View key={store.id} style={styles.flexStoreContainer}>
+                <View style={styles.productDivFavorites}>
+                  <Image
+                    style={styles.productImage}
+                    source={{ uri: store.storeImgUrl }}
+                  />
+                </View>
+                <View style={styles.flexNameDiv}>
+                  <AppText style={styles.storeName}>{store.storeName}</AppText>
+                  <Image
+                    style={styles.favoriteImage}
+                    source={require("../assets/favorite_icon.png")}
+                  />
+                </View>
+              </View>
+            ))
+          )}
         </View>
       </View>
     </ScrollView>
