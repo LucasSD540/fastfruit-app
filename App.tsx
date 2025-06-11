@@ -16,6 +16,8 @@ import { CartScreen } from "./screens/CartScreen";
 import { AddressScreen } from "./screens/AddressScreen";
 import { PaymentScreen } from "./screens/PaymentScreen";
 import { PixScreen } from "./screens/PixScreen";
+import "react-native-url-polyfill/auto";
+import "react-native-get-random-values";
 
 const Stack = createStackNavigator();
 

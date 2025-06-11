@@ -1,7 +1,17 @@
 import { View, Image, StyleSheet, Pressable } from "react-native";
 import { AppText } from "../components/AppText";
+import { supabase } from "../lib/supabase";
 
 export const ProfileScreen = ({ navigation }: any) => {
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Erro ao deslogar:", error.message);
+    } else {
+      navigation.navigate("LoginScreen");
+    }
+  };
+
   return (
     <View>
       <View style={styles.logoDiv}>
@@ -52,7 +62,7 @@ export const ProfileScreen = ({ navigation }: any) => {
           </AppText>
           <View style={styles.line} />
         </View>
-        <Pressable onPress={() => navigation.navigate("LoginScreen")}>
+        <Pressable onPress={handleLogout}>
           <AppText
             style={[styles.optionsText, { marginTop: 20, color: "#FF0000" }]}
           >

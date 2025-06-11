@@ -1,7 +1,41 @@
 import { View, Image, StyleSheet, ScrollView, Pressable } from "react-native";
 import { AppText } from "../components/AppText";
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
+
+type Product = {
+  id: string;
+  created_at: string;
+  productName: string;
+  productImgUrl: string;
+  price: number;
+};
 
 export const HomeScreen = ({ navigation }: any) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("product")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Erro ao buscar produtos:", error);
+      } else {
+        setProducts(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchProducts();
+  }, []);
+
+  console.log("Products in state:", products);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.logoDiv}>
@@ -17,76 +51,30 @@ export const HomeScreen = ({ navigation }: any) => {
         </View>
         <AppText style={styles.sectionTile}>Mais comprados</AppText>
         <View style={styles.productContainer}>
-          <Pressable
-            onPress={() => navigation.navigate("SelectProductScreen")}
-            style={styles.productDiv}
-          >
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-            <AppText style={styles.productName}>Brócolis</AppText>
-          </Pressable>
-          <Pressable
-            onPress={() => navigation.navigate("SelectProductScreen")}
-            style={styles.productDiv}
-          >
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-            <AppText style={styles.productName}>Brócolis</AppText>
-          </Pressable>
-          <Pressable
-            onPress={() => navigation.navigate("SelectProductScreen")}
-            style={styles.productDiv}
-          >
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-            <AppText style={styles.productName}>Brócolis</AppText>
-          </Pressable>
-          <Pressable
-            onPress={() => navigation.navigate("SelectProductScreen")}
-            style={styles.productDiv}
-          >
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-            <AppText style={styles.productName}>Brócolis</AppText>
-          </Pressable>
-        </View>
-        <View style={styles.productContainer}>
-          <View style={styles.productDiv}>
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-            <AppText style={styles.productName}>Brócolis</AppText>
-          </View>
-          <View style={styles.productDiv}>
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-            <AppText style={styles.productName}>Brócolis</AppText>
-          </View>
-          <View style={styles.productDiv}>
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-            <AppText style={styles.productName}>Brócolis</AppText>
-          </View>
-          <View style={styles.productDiv}>
-            <Image
-              style={styles.productImage}
-              source={require("../assets/brocolis.png")}
-            />
-            <AppText style={styles.productName}>Brócolis</AppText>
-          </View>
+          {loading ? (
+            <AppText>Carregando produtos...</AppText>
+          ) : (
+            products.map((product) => (
+              <Pressable
+                key={product.id}
+                onPress={() =>
+                  navigation.navigate("SelectProductScreen", {
+                    productId: product.id,
+                  })
+                }
+                style={styles.productDiv}
+              >
+                <Image
+                  style={styles.productImage}
+                  source={{ uri: product.productImgUrl }}
+                  resizeMode="contain"
+                />
+                <AppText style={styles.productName}>
+                  {product.productName}
+                </AppText>
+              </Pressable>
+            ))
+          )}
         </View>
         <AppText style={styles.sectionTile}>Últimas lojas</AppText>
         <View style={styles.productLastStoreContainer}>
@@ -228,10 +216,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   productContainer: {
-    display: "flex",
     flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "space-between",
-    marginTop: 16,
   },
   productLastStoreContainer: {
     display: "flex",
@@ -251,7 +238,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   productDiv: {
-    width: "20%",
+    width: "23%",
     height: 64,
     borderRadius: 20,
     backgroundColor: "#fff",

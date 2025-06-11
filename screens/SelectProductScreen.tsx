@@ -1,7 +1,50 @@
-import { View, Image, StyleSheet, Pressable } from "react-native";
+import { View, Image, StyleSheet, Pressable, Text } from "react-native";
 import { AppText } from "../components/AppText";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
+
+type Product = {
+  id: number;
+  productName: string;
+  productPrice: string;
+};
+
+type RootStackParamList = {
+  SelectProductScreen: { productId: number };
+};
+
+type SelectProductScreenRouteProp = RouteProp<
+  RootStackParamList,
+  "SelectProductScreen"
+>;
 
 export const SelectProductScreen = ({ navigation }: any) => {
+  const route = useRoute<SelectProductScreenRouteProp>();
+  const { productId } = route.params;
+
+  const [product, setProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data, error } = await supabase
+        .from("product")
+        .select("*")
+        .eq("id", productId)
+        .single();
+
+      if (error) {
+        console.error("Erro ao buscar produto:", error);
+      } else {
+        setProduct(data as Product);
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+
+  if (!product) return <Text>Carregando...</Text>;
+
   return (
     <View>
       <View style={styles.logoDiv}>
@@ -23,18 +66,8 @@ export const SelectProductScreen = ({ navigation }: any) => {
           >
             <Image source={require("../assets/brocolis_choice.png")} />
           </Pressable>
-          <AppText style={styles.productName}>Brócolis Bandeja</AppText>
-          <AppText style={styles.productPrice}>R$ 12,99</AppText>
-        </View>
-        <View style={styles.productDiv}>
-          <Pressable
-            onPress={() => navigation.navigate("AddProductScreen")}
-            style={styles.productImgBackground}
-          >
-            <Image source={require("../assets/brocolis_choice.png")} />
-          </Pressable>
-          <AppText style={styles.productName}>Brócolis Bandeja</AppText>
-          <AppText style={styles.productPrice}>R$ 12,99</AppText>
+          <AppText style={styles.productName}>{product.productName}</AppText>
+          <AppText style={styles.productPrice}>{product.productPrice}</AppText>
         </View>
       </View>
     </View>
