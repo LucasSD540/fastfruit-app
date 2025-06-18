@@ -17,8 +17,10 @@ const { height } = Dimensions.get("screen");
 export const LoginForm = ({ navigation }: any) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    setLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -29,6 +31,7 @@ export const LoginForm = ({ navigation }: any) => {
     } else {
       navigation.navigate("ChoiceProfile");
     }
+    setLoading(false);
   };
 
   return (
@@ -62,7 +65,11 @@ export const LoginForm = ({ navigation }: any) => {
           <AppText style={styles.forgotText}>Esqueci minha senha</AppText>
         </View>
         <Pressable onPress={handleLogin} style={styles.button}>
-          <AppText style={styles.buttonText}>Continuar</AppText>
+          {loading ? (
+            <AppText style={styles.buttonText}>Carregando...</AppText>
+          ) : (
+            <AppText style={styles.buttonText}>Continuar</AppText>
+          )}
         </Pressable>
       </View>
     </ScrollView>

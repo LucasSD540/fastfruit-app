@@ -1,31 +1,40 @@
-import { View, Image, StyleSheet, Pressable, ScrollView, Dimensions } from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  Dimensions,
+} from "react-native";
 import { AppText } from "../components/AppText";
 
-const { height } = Dimensions.get('screen');
+const { height } = Dimensions.get("screen");
 
 export const LoginScreen = ({ navigation }: any) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-      <Image source={require("../assets/banner.png")} style={styles.banner} />
-      <Pressable
-        style={styles.button1}
-        onPress={() => navigation.navigate("LoginForm")}
-      >
-        <AppText style={styles.buttonText}>Já tenho uma conta</AppText>
-      </Pressable>
-      <Pressable 
-        style={styles.button2} 
-        onPress={() => navigation.navigate("RegisterForm")}
-      >
-        <AppText style={styles.buttonText}>Criar nova conta</AppText>
-      </Pressable>
-      <AppText style={styles.accessText}>Acessar com</AppText>
-      <View style={styles.flexImageView}>
-        <Image source={require("../assets/facebook_logo.png")} />
-        <Image source={require("../assets/google_logo.png")} />
-      </View>
-      <AppText style={styles.visitorText}>Continuar como visitante</AppText>
+        <Image source={require("../assets/banner.png")} style={styles.banner} />
+        <Pressable
+          style={styles.button1}
+          onPress={() => navigation.navigate("LoginForm")}
+        >
+          <AppText style={styles.buttonText}>Já tenho uma conta</AppText>
+        </Pressable>
+        <Pressable
+          style={styles.button2}
+          onPress={() => navigation.navigate("RegisterForm")}
+        >
+          <AppText style={styles.buttonText}>Criar nova conta</AppText>
+        </Pressable>
+        <AppText style={styles.accessText}>Acessar com</AppText>
+        <View style={styles.flexImageView}>
+          <Image source={require("../assets/facebook_logo.png")} />
+          <Image source={require("../assets/google_logo.png")} />
+        </View>
+        <Pressable onPress={() => navigation.navigate("HomeScreen")}>
+          <AppText style={styles.visitorText}>Continuar como visitante</AppText>
+        </Pressable>
       </View>
     </ScrollView>
   );

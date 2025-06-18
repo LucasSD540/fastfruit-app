@@ -21,8 +21,10 @@ export const RegisterForm = ({ navigation }: any) => {
   const [surname, setSurname] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
+    setLoading(true);
     if (password !== confirmPassword) {
       Alert.alert("Erro", "As senhas não coincidem");
       return;
@@ -49,6 +51,7 @@ export const RegisterForm = ({ navigation }: any) => {
       );
       navigation.navigate("LoginForm");
     }
+    setLoading(false);
   };
 
   return (
@@ -104,7 +107,11 @@ export const RegisterForm = ({ navigation }: any) => {
           />
         </View>
         <Pressable onPress={handleRegister} style={styles.button}>
-          <AppText style={styles.buttonText}>Cadastrar</AppText>
+          {loading ? (
+            <AppText style={styles.buttonText}>Carregando...</AppText>
+          ) : (
+            <AppText style={styles.buttonText}>Cadastrar</AppText>
+          )}
         </Pressable>
       </View>
     </ScrollView>
