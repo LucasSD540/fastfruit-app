@@ -1,8 +1,47 @@
-import { View, Image, StyleSheet, Pressable } from "react-native";
+import { useEffect, useState } from "react";
+import { View, Image, StyleSheet, Pressable, Alert } from "react-native";
 import { AppText } from "../components/AppText";
 import { supabase } from "../lib/supabase";
 
 export const ProfileScreen = ({ navigation }: any) => {
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [endereco, setEndereco] = useState("");
+  const [cep, setCep] = useState("");
+  const [complemento, setComplemento] = useState("");
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        Alert.alert("Erro", "Usuário não autenticado");
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (error || !data) {
+        Alert.alert("Erro", "Erro ao carregar informações do perfil");
+      } else {
+        setName(data.name || "");
+        setSurname(data.surname || "");
+        setEndereco(data.endereco || "");
+        setCep(data.cep || "");
+        setComplemento(data.complemento || "");
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -21,9 +60,11 @@ export const ProfileScreen = ({ navigation }: any) => {
       <View style={styles.profileInfoContainer}>
         <Image source={require("../assets/user_profile.png")} />
         <View style={styles.profileInfo}>
-          <AppText style={styles.nameText}>Nicolau Silva Silveira</AppText>
+          <AppText style={styles.nameText}>
+            {name} {surname}
+          </AppText>
           <AppText style={styles.addressText}>
-            QS 07 - Taguatinga, Brasília - DF
+            {endereco} {complemento} - {cep}
           </AppText>
           <Pressable
             onPress={() => navigation.navigate("EditProfile")}
