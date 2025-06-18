@@ -18,6 +18,8 @@ import { PaymentScreen } from "./screens/PaymentScreen";
 import { PixScreen } from "./screens/PixScreen";
 import "react-native-url-polyfill/auto";
 import "react-native-get-random-values";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 const Stack = createStackNavigator();
 
@@ -27,79 +29,81 @@ export default function App() {
   });
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="LoginScreen">
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="LoginScreen"
-          component={LoginScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="LoginForm"
-          component={LoginForm}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="RegisterForm"
-          component={RegisterForm}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="ChoiceProfile"
-          component={ChoiceProfile}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="HomeScreen"
-          component={BottomTabs}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="ProfileScreen"
-          component={ProfileScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="EditProfile"
-          component={EditProfile}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="PaymentMethodsScreen"
-          component={PaymentMethodsScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="SelectProductScreen"
-          component={SelectProductScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="AddProductScreen"
-          component={AddProductScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="CartScreen"
-          component={CartScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="AddressScreen"
-          component={AddressScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="PaymentScreen"
-          component={PaymentScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="PixScreen"
-          component={PixScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="LoginScreen">
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="LoginScreen"
+            component={LoginScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="LoginForm"
+            component={LoginForm}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="RegisterForm"
+            component={RegisterForm}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="ChoiceProfile"
+            component={ChoiceProfile}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="HomeScreen"
+            component={BottomTabs}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="ProfileScreen"
+            component={ProfileScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="EditProfile"
+            component={EditProfile}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="PaymentMethodsScreen"
+            component={PaymentMethodsScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="SelectProductScreen"
+            component={SelectProductScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="AddProductScreen"
+            component={AddProductScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="CartScreen"
+            component={CartScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="AddressScreen"
+            component={AddressScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="PaymentScreen"
+            component={PaymentScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="PixScreen"
+            component={PixScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }

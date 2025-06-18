@@ -1,14 +1,75 @@
-import { View, Text, Image, Pressable, StyleSheet } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  View,
+  Image,
+  Pressable,
+  StyleSheet,
+  ScrollView,
+  Alert,
+} from "react-native";
 import { AppText } from "../components/AppText";
+import { supabase } from "../lib/supabase";
 
 export const AddressScreen = ({ navigation }: any) => {
+  const [endereco, setEndereco] = useState("Carregando endereço...");
+
+  const [subtotal, setSubtotal] = useState(0);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+
+  const serviceFee = 1.5;
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        Alert.alert("Erro", "Usuário não autenticado");
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("endereco")
+        .eq("id", user.id)
+        .single();
+
+      if (error || !data) {
+        setEndereco("Endereço não cadastrado");
+      } else {
+        setEndereco(data.endereco || "Endereço não cadastrado");
+      }
+    };
+
+    const fetchCartItems = async () => {
+      const { data, error } = await supabase.from("cart").select("*");
+
+      if (!error && data) {
+        const totalQtd = data.reduce((acc, item) => acc + item.quantity, 0);
+        const subtotalValor = data.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        );
+        setTotalQuantity(totalQtd);
+        setSubtotal(subtotalValor);
+      }
+    };
+
+    fetchUserData();
+    fetchCartItems();
+  }, []);
+
+  const total = subtotal + serviceFee;
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.logoDiv}>
         <Image style={styles.logoImg} source={require("../assets/logo.png")} />
       </View>
       <View style={styles.line} />
-      <Pressable onPress={() => navigation.navigate("CartScreen")}>
+      <Pressable onPress={() => navigation.goBack()}>
         <Image
           style={styles.image}
           source={require("../assets/back_icon.png")}
@@ -17,9 +78,11 @@ export const AddressScreen = ({ navigation }: any) => {
       <View style={styles.sectionTitleContainer}>
         <AppText style={styles.sectionTitle}>MEU CARRINHO</AppText>
       </View>
+
       <AppText style={{ left: "10%", marginTop: 16, fontWeight: "bold" }}>
         Endereço
       </AppText>
+
       <View style={styles.itemContainer}>
         <View style={styles.productDiv}>
           <Image
@@ -33,7 +96,7 @@ export const AddressScreen = ({ navigation }: any) => {
                 { fontWeight: "bold", fontSize: 9, width: 140 },
               ]}
             >
-              Qs 7 - Taguatinga, Brasília-DF
+              {endereco}
             </AppText>
           </View>
         </View>
@@ -43,62 +106,31 @@ export const AddressScreen = ({ navigation }: any) => {
           </Pressable>
         </View>
       </View>
+
       <View style={{ marginTop: 200 }}>
         <AppText style={{ left: "10%", fontSize: 15, fontWeight: "bold" }}>
           Resumo
         </AppText>
-        <View
-          style={{
-            flexDirection: "row",
-            left: "10%",
-            width: "80%",
-            justifyContent: "space-between",
-          }}
-        >
+
+        <View style={styles.row}>
           <AppText>Subtotal</AppText>
-          <AppText>R$ 25,98</AppText>
+          <AppText>R$ {subtotal.toFixed(2)}</AppText>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            left: "10%",
-            width: "80%",
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={styles.row}>
           <AppText>Taxa de entrega</AppText>
           <AppText>grátis</AppText>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            left: "10%",
-            width: "80%",
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={styles.row}>
           <AppText>Taxa de serviço</AppText>
-          <AppText>R$ 1,50</AppText>
+          <AppText>R$ {serviceFee.toFixed(2)}</AppText>
         </View>
       </View>
-      <View
-        style={{
-          marginTop: 16,
-          left: "10%",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          width: "80%",
-          borderWidth: 1,
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
-          borderBottomLeftRadius: 30,
-          borderBottomRightRadius: 30,
-          padding: 8,
-        }}
-      >
+
+      <View style={styles.totalContainer}>
         <AppText style={{ fontWeight: "bold" }}>TOTAL</AppText>
-        <AppText style={{ fontWeight: "bold" }}>R$ 27,48</AppText>
+        <AppText style={{ fontWeight: "bold" }}>R$ {total.toFixed(2)}</AppText>
       </View>
+
       <View>
         <Pressable
           onPress={() => navigation.navigate("PaymentScreen")}
@@ -107,7 +139,7 @@ export const AddressScreen = ({ navigation }: any) => {
           <AppText style={styles.buttonText}>Continuar</AppText>
         </Pressable>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -222,5 +254,21 @@ const styles = StyleSheet.create({
     height: "100%",
     flexDirection: "column",
     justifyContent: "space-between",
+  },
+  row: {
+    flexDirection: "row",
+    left: "10%",
+    width: "80%",
+    justifyContent: "space-between",
+  },
+  totalContainer: {
+    marginTop: 16,
+    left: "10%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+    borderWidth: 1,
+    borderRadius: 30,
+    padding: 8,
   },
 });

@@ -1,7 +1,40 @@
-import { View, Image, Pressable, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Image,
+  Pressable,
+  StyleSheet,
+  ScrollView,
+  Alert,
+} from "react-native";
 import { AppText } from "../components/AppText";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
 
 export const PixScreen = ({ navigation }: any) => {
+  const [subtotal, setSubtotal] = useState(0);
+  const serviceFee = 1.5;
+  const total = subtotal + serviceFee;
+
+  useEffect(() => {
+    const fetchCartData = async () => {
+      const { data, error } = await supabase.from("cart").select("*");
+
+      if (error || !data) {
+        Alert.alert("Erro", "Erro ao carregar o carrinho");
+        return;
+      }
+
+      const subtotalValue = data.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
+
+      setSubtotal(subtotalValue);
+    };
+
+    fetchCartData();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.logoDiv}>
@@ -22,9 +55,9 @@ export const PixScreen = ({ navigation }: any) => {
           marginTop: 24,
           left: "10%",
           width: "80%",
-          boxShadow: "0px 1px 5px 0px rgba(0,0,0,0.25)",
           borderRadius: 10,
           padding: 10,
+          backgroundColor: "#f2f2f2",
         }}
       >
         <AppText>Pix copia e cola:</AppText>
@@ -38,18 +71,19 @@ export const PixScreen = ({ navigation }: any) => {
             width: "100%",
             justifyContent: "space-between",
             alignItems: "center",
+            marginTop: 8,
           }}
         >
           <AppText style={{ color: "#800080" }}>1:00</AppText>
           <View
             style={{
-              boxShadow: "0px 1px 5px 0px rgba(0,0,0,0.25)",
               borderRadius: 10,
               width: 70,
               height: 35,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
+              backgroundColor: "#fff",
             }}
           >
             <Image source={require("../assets/page_icon.png")} />
@@ -57,62 +91,28 @@ export const PixScreen = ({ navigation }: any) => {
           </View>
         </View>
       </View>
+
       <View style={{ marginTop: 24 }}>
         <AppText style={{ left: "10%", fontSize: 15, fontWeight: "bold" }}>
           Resumo
         </AppText>
-        <View
-          style={{
-            flexDirection: "row",
-            left: "10%",
-            width: "80%",
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={styles.summaryRow}>
           <AppText>Subtotal</AppText>
-          <AppText>R$ 25,98</AppText>
+          <AppText>R$ {subtotal.toFixed(2)}</AppText>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            left: "10%",
-            width: "80%",
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={styles.summaryRow}>
           <AppText>Taxa de entrega</AppText>
           <AppText>grátis</AppText>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            left: "10%",
-            width: "80%",
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={styles.summaryRow}>
           <AppText>Taxa de serviço</AppText>
-          <AppText>R$ 1,50</AppText>
+          <AppText>R$ {serviceFee.toFixed(2)}</AppText>
         </View>
       </View>
-      <View
-        style={{
-          marginTop: 16,
-          marginBottom: 16,
-          left: "10%",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          width: "80%",
-          borderWidth: 1,
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
-          borderBottomLeftRadius: 30,
-          borderBottomRightRadius: 30,
-          padding: 8,
-        }}
-      >
+
+      <View style={styles.totalContainer}>
         <AppText style={{ fontWeight: "bold" }}>TOTAL</AppText>
-        <AppText style={{ fontWeight: "bold" }}>R$ 27,48</AppText>
+        <AppText style={{ fontWeight: "bold" }}>R$ {total.toFixed(2)}</AppText>
       </View>
     </ScrollView>
   );
@@ -229,5 +229,23 @@ const styles = StyleSheet.create({
     height: "100%",
     flexDirection: "column",
     justifyContent: "space-between",
+  },
+  summaryRow: {
+    flexDirection: "row",
+    left: "10%",
+    width: "80%",
+    justifyContent: "space-between",
+  },
+
+  totalContainer: {
+    marginTop: 16,
+    marginBottom: 16,
+    left: "10%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+    borderWidth: 1,
+    borderRadius: 30,
+    padding: 8,
   },
 });

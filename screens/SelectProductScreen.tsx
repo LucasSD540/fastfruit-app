@@ -3,11 +3,14 @@ import { AppText } from "../components/AppText";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/cartSlice";
 
 type Product = {
-  id: number;
+  id: string;
   productName: string;
-  productPrice: string;
+  productImgUrl: string;
+  price: number;
 };
 
 type RootStackParamList = {
@@ -23,6 +26,7 @@ export const SelectProductScreen = ({ navigation }: any) => {
   const route = useRoute<SelectProductScreenRouteProp>();
   const { productId } = route.params;
 
+  const dispatch = useDispatch();
   const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
@@ -43,6 +47,21 @@ export const SelectProductScreen = ({ navigation }: any) => {
     fetchProduct();
   }, [productId]);
 
+  const handleAddToCart = () => {
+    if (product) {
+      dispatch(
+        addToCart({
+          id: product.id,
+          name: product.productName,
+          image: product.productImgUrl,
+          price: product.price,
+          quantity: 1,
+        })
+      );
+      navigation.navigate("AddProductScreen", { productId: product.id });
+    }
+  };
+
   if (!product) return <Text>Carregando...</Text>;
 
   return (
@@ -58,16 +77,21 @@ export const SelectProductScreen = ({ navigation }: any) => {
         />
       </Pressable>
       <View style={styles.infoContainer}>
-        <AppText style={styles.sectionTitle}>Brócolis</AppText>
+        <AppText style={styles.sectionTitle}>{product.productName}</AppText>
         <View style={styles.productDiv}>
           <Pressable
-            onPress={() => navigation.navigate("AddProductScreen")}
+            onPress={handleAddToCart}
             style={styles.productImgBackground}
           >
-            <Image source={require("../assets/brocolis_choice.png")} />
+            <Image
+              style={{ width: 120, height: 120 }}
+              source={{ uri: product.productImgUrl }}
+            />
           </Pressable>
           <AppText style={styles.productName}>{product.productName}</AppText>
-          <AppText style={styles.productPrice}>{product.productPrice}</AppText>
+          <AppText style={styles.productPrice}>
+            R$ {product.price.toFixed(2)}
+          </AppText>
         </View>
       </View>
     </View>

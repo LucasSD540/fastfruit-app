@@ -1,40 +1,89 @@
 import { View, Image, Pressable, StyleSheet, Text } from "react-native";
 import { AppText } from "../components/AppText";
+import { useRoute, RouteProp } from "@react-navigation/native";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../redux/store";
+import { useState } from "react";
+import { addToCart } from "../redux/cartSlice";
+
+type RootStackParamList = {
+  AddProductScreen: { productId: string };
+};
+
+type AddProductScreenRouteProp = RouteProp<
+  RootStackParamList,
+  "AddProductScreen"
+>;
 
 export const AddProductScreen = ({ navigation }: any) => {
+  const dispatch = useDispatch();
+  const route = useRoute<AddProductScreenRouteProp>();
+  const { productId } = route.params;
+
+  const cartItem = useSelector((state: RootState) =>
+    state.cart.items.find((item) => item.id === productId)
+  );
+
+  const [quantity, setQuantity] = useState(cartItem?.quantity || 1);
+
+  if (!cartItem) return <Text>Produto não encontrado no carrinho</Text>;
+
   return (
     <View style={styles.container}>
       <View style={styles.logoDiv}>
         <Image style={styles.logoImg} source={require("../assets/logo.png")} />
       </View>
       <View style={styles.line} />
-      <Pressable onPress={() => navigation.navigate("SelectProductScreen")}>
+      <Pressable onPress={() => navigation.goBack()}>
         <Image
           style={styles.image}
           source={require("../assets/back_icon.png")}
         />
       </Pressable>
       <View style={styles.productInfoContainer}>
-        <AppText style={styles.sectionTitle}>Brócolis Bandeja</AppText>
+        <AppText style={styles.sectionTitle}>{cartItem.name}</AppText>
       </View>
       <View style={styles.productInfoContainer}>
         <View style={styles.productImgBackground}>
-          <Image source={require("../assets/brocolis_big.png")} />
+          <Image
+            style={{ width: 120, height: 120 }}
+            source={{ uri: cartItem.image }}
+          />
         </View>
-        <AppText style={styles.productName}>Aproximadamente 250 gramas</AppText>
-        <AppText style={styles.productInfo}>Por: R$ 51,96 / kg</AppText>
-        <AppText style={[styles.productInfo, { color: "#FF9A3D" }]}>
-          R$ 12,99
+        <AppText style={styles.productName}>Quantidade: {quantity}</AppText>
+        <AppText style={styles.productInfo}>
+          Preço unitário: R$ {cartItem.price.toFixed(2)}
         </AppText>
-        <AppText style={styles.productInfo}>0,250 / kg</AppText>
+        <AppText style={[styles.productInfo, { color: "#FF9A3D" }]}>
+          Total: R$ {(cartItem.price * quantity).toFixed(2)}
+        </AppText>
         <View style={styles.btnContainer}>
-          <Pressable style={styles.quantityButton}>
-            <Text style={{ fontSize: 16 }}>-</Text>
-            <Text>1</Text>
-            <Text style={{ fontSize: 16 }}>+</Text>
-          </Pressable>
+          <View style={styles.quantityButton}>
+            <Pressable onPress={() => setQuantity((q) => (q > 1 ? q - 1 : 1))}>
+              <Text style={styles.quantityText}>-</Text>
+            </Pressable>
+
+            <Text style={[styles.quantityText, { marginHorizontal: 20 }]}>
+              {quantity}
+            </Text>
+
+            <Pressable onPress={() => setQuantity((q) => q + 1)}>
+              <Text style={styles.quantityText}>+</Text>
+            </Pressable>
+          </View>
           <Pressable
-            onPress={() => navigation.navigate("CartScreen")}
+            onPress={() => {
+              dispatch(
+                addToCart({
+                  id: cartItem.id,
+                  name: cartItem.name,
+                  image: cartItem.image,
+                  price: cartItem.price,
+                  quantity: quantity,
+                })
+              );
+              navigation.navigate("CartScreen");
+            }}
             style={styles.addButton}
           >
             <Image source={require("../assets/add_icon.png")} />
@@ -105,14 +154,23 @@ export const styles = StyleSheet.create({
   },
   quantityButton: {
     flexDirection: "row",
-    width: 150,
+    width: 120,
     height: 40,
     backgroundColor: "#fff",
     borderRadius: 10,
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: 10,
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#ccc",
   },
+
+  quantityText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+
   addButton: {
     flexDirection: "row",
     width: 150,
