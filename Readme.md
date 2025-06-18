@@ -18,8 +18,12 @@ Trazer o projeto do repositório remoto para o local
 
 Iniciar o projeto
 
--- npm start (na pasta raíz do projeto)
+-- npm install (na pasta raíz do projeto)
 
 -- npx expo start
 
 -- a (digite a para abrir no android studio)
+
+Link do vídeo
+
+-- https://youtu.be/U9RmAqpKX24
